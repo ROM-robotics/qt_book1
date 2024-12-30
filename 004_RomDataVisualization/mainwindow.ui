@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1400</width>
+    <height>1050</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1400</width>
+    <height>1050</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1400</width>
+    <height>1050</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Umpush</family>
+    <pointsize>-1</pointsize>
+    <italic>true</italic>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>ROM ROBOTICS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="rom_res.qrc">
+    <normaloff>:/haha/rom_resource/main_dWS_icon.ico</normaloff>:/haha/rom_resource/main_dWS_icon.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#centralwidget{
+background-image: url(:/haha/rom_resource/mdyblur1400x1050.png) 0 0 0 0 stretch stretch;
+}
+
+*{
+font-family: Umpush;
+font-size: 14px;
+color:blue;
+}
+
+#loginFrame{
+background:rgba(0,0,0,0.6);
+border-radius: 15px;
+}
+
+#pushButton{
+border-radius: 0px;
+background: transparent;
+}
+
+#loginBtn{
+border-radius:15px;
+color: white;
+background: rgb(27, 124, 231);
+Font-size: 14px;
+}
+
+#loginBtn:hover{
+border-radius:15px;
+color: #333;
+background:rgb(155, 194, 251);
+font-weight:bold;
+}
+
+#lineEditPassword,#lineEditUserName {
+background: transparent;
+border: none;
+color: #717072;
+border-bottom: 1px solid #717072;
+Font-size: 14px;
+}
+#labelUserName{
+Font-size: 14px;
+color: white;
+background: transparent;
+}
+#labelPassword{
+Font-size: 14px;
+color: white;
+background: transparent;
+}
+
+#labelLoginHere{
+Font-size: 17px;
+color: white;
+background: transparent;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">*{
+font-family: Umpush;
+font-size: 14px;
+color:blue;
+}
+
+#loginFrame{
+background:rgba(0,0,0,0.6);
+border-radius: 15px;
+}
+
+#pushButton{
+border-radius: 0px;
+background: transparent;
+}
+
+#loginBtn{
+border-radius:15px;
+color: white;
+background: rgb(27, 124, 231);
+Font-size: 14px;
+}
+
+#loginBtn:hover{
+border-radius:15px;
+color: #333;
+background:rgb(155, 194, 251);
+font-weight:bold;
+}
+
+#lineEditPassword,#lineEditUserName {
+background: transparent;
+border: none;
+color: #717072;
+border-bottom: 1px solid #717072;
+Font-size: 14px;
+}
+#labelUserName{
+Font-size: 14px;
+color: white;
+background: transparent;
+}
+#labelPassword{
+Font-size: 14px;
+color: white;
+background: transparent;
+}
+
+#labelLoginHere{
+Font-size: 17px;
+color: white;
+background: transparent;
+}</string>
+   </property>
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1411</width>
+      <height>1051</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent;</string>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="loginWidget">
+     <property name="styleSheet">
+      <string notr="true">*{
+font-family: Umpush;
+font-size: 14px;
+color:blue;
+}
+
+#loginFrame{
+background:rgba(0,0,0,0.6);
+border-radius: 15px;
+}
+
+#pushButton{
+border-radius: 0px;
+background: transparent;
+}
+
+#loginBtn{
+border-radius:15px;
+color: white;
+background: rgb(27, 124, 231);
+Font-size: 14px;
+}
+
+#loginBtn:hover{
+border-radius:15px;
+color: #333;
+background:rgb(155, 194, 251);
+font-weight:bold;
+}
+
+#lineEditPassword,#lineEditUserName {
+background: transparent;
+border: none;
+color: #717072;
+border-bottom: 1px solid #717072;
+Font-size: 14px;
+}
+#labelUserName{
+Font-size: 14px;
+color: white;
+background: transparent;
+}
+#labelPassword{
+Font-size: 14px;
+color: white;
+background: transparent;
+}
+
+#labelLoginHere{
+Font-size: 17px;
+color: white;
+background: transparent;
+}</string>
+     </property>
+     <widget class="QLabel" name="labelLoginHere">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>70</y>
+        <width>129</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ROM DYNAMICS</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelUserName">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>150</y>
+        <width>129</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Username</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelPassword">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>230</y>
+        <width>129</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Password</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditUserName">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>320</y>
+        <width>113</width>
+        <height>42</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditPassword">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>380</y>
+        <width>113</width>
+        <height>42</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="loginBtn">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>450</y>
+        <width>170</width>
+        <height>48</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2"/>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="rom_res.qrc"/>
+ </resources>
+ <connections/>
+</ui>
