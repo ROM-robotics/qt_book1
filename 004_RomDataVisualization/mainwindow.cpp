@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <QDebug>
 
 /* to do => to add sqlite file to project's resource */
-#define path_to_userDB "/home/.romrobotics/rom_user.sqlite"
+//#define path_to_userDB "/home/.romrobotics/rom_user.sqlite"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -49,73 +50,109 @@ MainWindow::MainWindow(QWidget *parent)
     animationGroup->addAnimation(animation6);
 
     animationGroup->start();
+
+    ////////BAR CHART/////////////
+       /* performance အတွက် data များနှင့် object များခွဲထားရန် */
+       QBarSet *set0 = new QBarSet("Jane");
+       QBarSet *set1 = new QBarSet("John");
+       QBarSet *set2 = new QBarSet("Axel");
+       QBarSet *set3 = new QBarSet("Mary");
+       QBarSet *set4 = new QBarSet("Samantha");
+
+       *set0 << 10 << 20 << 30 << 40 << 50 << 60;
+       *set1 << 50 << 70 << 40 << 45 << 80 << 70;
+       *set2 << 30 << 50 << 80 << 13 << 80 << 50;
+       *set3 << 50 << 60 << 70 << 30 << 40 << 25;
+       *set4 << 90 << 70 << 50 << 30 << 16 << 42;
+
+       QBarSeries *seriesBar = new QBarSeries();
+          seriesBar->append(set0);
+          seriesBar->append(set1);
+          seriesBar->append(set2);
+          seriesBar->append(set3);
+          seriesBar->append(set4);
+
+          QChart *chartBar = new QChart();
+          chartBar->addSeries(seriesBar);
+          chartBar->setTitle("Students Performance");
+          chartBar->setAnimationOptions(QChart::SeriesAnimations);
+
+          QStringList categories;
+          categories << "Jan" << "Feb" << "Mar" << "Apr" << "May" << "Jun";
+          QBarCategoryAxis *axis = new QBarCategoryAxis();
+          axis->append(categories);
+          chartBar->createDefaultAxes();
+          chartBar->setAxisX(axis, seriesBar);
+
+          chartViewBar = new QChartView(chartBar);
+          chartViewBar->setRenderHint(QPainter::Antialiasing);
+          chartViewBar->setParent(ui->chart1);
+
+          QPieSeries *seriesPie = new QPieSeries();
+          seriesPie->append("Jane", 10);
+          seriesPie->append("Joe", 20);
+          seriesPie->append("Andy", 30);
+          seriesPie->append("Barbara", 40);
+          seriesPie->append("Jason", 50);
+
+          QPieSlice *slice = seriesPie->slices().at(1);
+          slice->setExploded();
+          slice->setLabelVisible();
+          slice->setPen(QPen(Qt::darkGreen, 2));
+          slice->setBrush(Qt::green);
+
+          QChart *chartPie = new QChart();
+          chartPie->addSeries(seriesPie);
+          chartPie->setTitle("Students Performance");
+
+          chartViewPie = new QChartView(chartPie);
+          chartViewPie->setRenderHint(QPainter::Antialiasing);
+          chartViewPie->setParent(ui->chart2);
+
+          QLineSeries *seriesLine = new QLineSeries();
+          seriesLine->append(0, 6);
+          seriesLine->append(2, 4);
+          seriesLine->append(3, 8);
+          seriesLine->append(7, 4);
+          seriesLine->append(10, 5);
+          seriesLine->append(11, 10);
+          seriesLine->append(13, 3);
+          seriesLine->append(17, 6);
+          seriesLine->append(18, 3);
+          seriesLine->append(20, 2);
+
+          QChart *chartLine = new QChart();
+          chartLine->addSeries(seriesLine);
+          chartLine->createDefaultAxes();
+          chartLine->setTitle("Students Performance");
+
+          chartViewLine = new QChartView(chartLine);
+          chartViewLine->setRenderHint(QPainter::Antialiasing);
+          chartViewLine->setParent(ui->chart3);
+
 }
 
 
-void MainWindow::on_loginBtn_clicked()
+bool MainWindow::check_password_fake()
 {
-    //check_password();
-    password_check();
-}
-
-bool MainWindow::password_check()
-{
+    //qDebug() << "check_password_fake()";
     return true;
 }
-void MainWindow::check_password(){}
-//void MainWindow::check_password()
-//{
-//    QFileInfo check_users_db(path_to_userDB);
-//    QString input_name = ui->lineEditUserName->text();
-//    QString input_pass = ui->lineEditPassword->text();
 
-//    if( !( input_name =="" || input_pass == "") )
-//    {
-//        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 
-//        if(check_users_db.isFile())
-//        {
-//            db.setDatabaseName(path_to_userDB);
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+   QMainWindow::resizeEvent(event);
 
-//            if(!db.open())
-//            {
-//                QMessageBox::warning(this,"Failed!","E001: DB Connection မအောင်မြင်ပါ။");
-//            } else
-//            {
+   chartViewBar->resize(chartViewBar->parentWidget()->size());
+   chartViewPie->resize(chartViewPie->parentWidget()->size());
+   chartViewLine->resize(chartViewLine->parentWidget()->size());
 
-//                QSqlQuery query(db);
-//                if(query.exec("SELECT name,password FROM users WHERE name =\'"+ input_name +
-//                          "\' AND password =\'" + input_pass +"\'"))
-//                {
-//                    if(query.next())
-//                    {
-//                        QMessageBox::information(this,"Success!","DB login အောင်မြင်သည်။");
-//                        // တခြားဟာတွေဒီမှာလုပ်ပါ။
-//                    }
-//                    else
-//                    {
-//                        QMessageBox::warning(this,"Error!","E002: အသုံးပြုသူအမည် သို့မဟုတ် လျှို့ဝှက်ကုတ် မှားနေသည်။");
+}
 
-//                    }
-//                }
-//                else
-//                {
-//                    QMessageBox::warning(this,"Error!","E003: users Table မရှိသေးပါ။");
-//                }
-//            }
-//        }
-//        else
-//        {
-//            QMessageBox::warning(this,"Not Existed!","E004: DB ဖိုင်မရှိပါ။");
-//        }
 
-//    }
-//    else
-//    {
-//        QMessageBox::warning(this,"Blank Name!","E001: အမည်နှင့် လျှို့ဝှက်နံပါတ်ထည့်ပါ။");
-//    }
-//    clear_and_focus();
-//}
+void MainWindow::check_password_database(){}
+
 
 void MainWindow::clear_and_focus(){
     ui->lineEditUserName->clear();
@@ -123,18 +160,42 @@ void MainWindow::clear_and_focus(){
     ui->lineEditUserName->setFocus();
 }
 
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+
+void MainWindow::on_stackedWidget_currentChanged(int arg1)
+{
+    if(arg1 == 1)
+    {
+        // do something with data for charts
+    }
+}
+
+
+void MainWindow::on_loginBtn_clicked()
+{
+    //qDebug() << "on_loginBtn_clicked()";
+    //check_password_database();
+    if(check_password_fake()== true)
+    {
+        ui->stackedWidget->setCurrentIndex(1);
+    }
+}
+
+
 void MainWindow::on_lineEditUserName_editingFinished()
 {
     ui->lineEditPassword->setFocus();
 }
 
+
 void MainWindow::on_lineEditPassword_editingFinished()
 {
-    ui->centralwidget->setFocus();
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
+    //ui->centralwidget->setFocus();
+    ui->loginBtn->setFocus();
 }
 

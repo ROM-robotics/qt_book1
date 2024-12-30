@@ -11,6 +11,17 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 
+#include <QtCharts>
+#include <QChartView>
+
+#include <QBarSet>
+#include <QBarSeries>
+
+#include <QPieSeries>
+#include <QPieSlice>
+
+#include <QLineSeries>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -23,17 +34,21 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void clear_and_focus();
-private:
+    void check_password_database();
+    bool check_password_fake();
+
+protected:
+    void resizeEvent(QResizeEvent* event);
+private slots:
+    void on_stackedWidget_currentChanged(int arg1);
+
     void on_loginBtn_clicked();
 
     void on_lineEditUserName_editingFinished();
 
     void on_lineEditPassword_editingFinished();
 
-    void on_adminbtn_clicked();
-
-    void on_clientbtn_clicked();
-
+private:
     Ui::MainWindow *ui;
     QPropertyAnimation *animation1;
     QPropertyAnimation *animation2;
@@ -42,7 +57,10 @@ private:
     QPropertyAnimation *animation5;
     QPropertyAnimation *animation6;
     QParallelAnimationGroup *animationGroup;
-    void check_password();
-    bool password_check();
+
+    QChartView *chartViewBar;
+    QChartView *chartViewPie;
+    QChartView *chartViewLine;
+
 };
 #endif // MAINWINDOW_H
