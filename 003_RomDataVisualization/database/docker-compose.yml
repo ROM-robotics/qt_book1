@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: ghostman   # Set your root password
+      MYSQL_DATABASE: rom_dynamics_database          # Optional: Default database to create
+    ports:
+      - "3306:3306"  # Expose MySQL port
+    volumes:
+      - mysql-data:/var/lib/mysql  # Persist MySQL data on your local machine
+    networks:
+      - mysql-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-container
+    environment:
+      PMA_HOST: mysql        # The MySQL service name (as defined in the docker-compose.yml)
+      PMA_PORT: 3306         # Port MySQL is running on (default: 3306)
+      MYSQL_ROOT_PASSWORD: ghostman  # The same root password used for MySQL
+    ports:
+      - "8080:80"  # Expose phpMyAdmin on port 8080
+    networks:
+      - mysql-network
+    depends_on:
+      - mysql
+
+networks:
+  mysql-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
