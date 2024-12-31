@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/haha">
+        <file>images/main.ico</file>
+        <file>images/mdyblur.png</file>
+    </qresource>
+</RCC>
