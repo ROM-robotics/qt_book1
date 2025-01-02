@@ -81,7 +81,7 @@
      <string>Remapping</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="uBtn">
+   <widget class="QPushButton" name="btnForward">
     <property name="geometry">
      <rect>
       <x>2550</x>
@@ -90,11 +90,18 @@
       <height>101</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
-     <string>U</string>
+     <string>↑</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="dBtn">
+   <widget class="QPushButton" name="btnStop">
     <property name="geometry">
      <rect>
       <x>2550</x>
@@ -103,11 +110,18 @@
       <height>101</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
-     <string>D</string>
+     <string>⛔</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="rBtn">
+   <widget class="QPushButton" name="btnRight">
     <property name="geometry">
      <rect>
       <x>2730</x>
@@ -116,11 +130,18 @@
       <height>101</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
-     <string>R</string>
+     <string>⟳</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="lBtn">
+   <widget class="QPushButton" name="btnLeft">
     <property name="geometry">
      <rect>
       <x>2360</x>
@@ -129,11 +150,18 @@
       <height>101</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
-     <string>L</string>
+     <string>⟲</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="estopBtn">
+   <widget class="QPushButton" name="btnEstop">
     <property name="geometry">
      <rect>
       <x>70</x>
