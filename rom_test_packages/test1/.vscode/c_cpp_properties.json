@@ -10,7 +10,7 @@
         "/home/mr_robot/devel_ws/install/teleop_twist_joy/include/**",
         "/home/mr_robot/devel_ws/install/stm32f1_system_interface/include/**",
         "/opt/ros/humble/include/**",
-        "/home/mr_robot/Desktop/QT/ros2_qt_threading/qt_ws/src/ros2_executor_style/include/**",
+        "/home/mr_robot/qt_ros_ws/src/test1/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",
