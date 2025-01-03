@@ -30,6 +30,8 @@ class MainWindow : public QMainWindow
     
     public slots:
         void DisplaySubscription(const QString &log);
+        void updateMap(const QImage& mapImage);
+        
         void sendMappingMode();
         void sendNavigationMode();
         void sendRemappingMode();

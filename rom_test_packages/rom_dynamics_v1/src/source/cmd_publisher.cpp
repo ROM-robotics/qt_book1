@@ -1,4 +1,4 @@
-#include "publisher.h"
+#include "cmd_publisher.h"
 
 Publisher::Publisher(const std::string &topic_name) : Node("qt_twist_publisher")
 {

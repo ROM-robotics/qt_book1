@@ -19,9 +19,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     current_mode_ = "navi";
 }
 
+void MainWindow::updateMap(const QImage& mapImage) 
+{
+    label->setPixmap(QPixmap::fromImage(mapImage));
+}
+
 void MainWindow::DisplaySubscription(const QString &log)
 {
-    label->setText(log);
+    //label->setText(log);
 }
 
 void MainWindow::sendMappingMode() {
@@ -42,6 +47,7 @@ void MainWindow::sendMappingMode() {
         ui->remappingBtn->setStyleSheet("background-color: none; font-weight: bold;");
     }
 }
+
 void MainWindow::sendNavigationMode() {
     if( current_mode_ == "navi" ) {
         return;
@@ -59,6 +65,7 @@ void MainWindow::sendNavigationMode() {
         ui->remappingBtn->setStyleSheet("background-color: none; font-weight: bold;");
     }
 }
+
 void MainWindow::sendRemappingMode() {
     if(current_mode_ == "remapping") {
         return;

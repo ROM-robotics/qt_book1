@@ -38,20 +38,24 @@ set(UI_FILES gui/ui/mainwindow.ui)
 qt5_wrap_ui(UI_HEADERS ${UI_FILES})
 
 add_executable(ROM_DYNAMICS
-    gui/source/main.cpp
     gui/header/mainwindow.h
+    #gui/header/map_viewer.h
+    gui/source/main.cpp
     gui/source/mainwindow.cpp
-    src/header/publisher.h
-    src/source/publisher.cpp
+    #gui/source/map_viewer.cpp
+    src/header/cmd_publisher.h
     src/header/subscriber.h
+    src/header/map_subscriber.h
+    src/source/cmd_publisher.cpp
     src/source/subscriber.cpp
+    src/source/map_subscriber.cpp
     ${UI_HEADERS}
 )
 
 
 target_link_libraries(ROM_DYNAMICS ${Qt5Core_LIBRARIES})
 target_link_libraries(ROM_DYNAMICS ${Qt5Widgets_LIBRARIES})
-ament_target_dependencies(ROM_DYNAMICS rclcpp std_msgs geometry_msgs)
+ament_target_dependencies(ROM_DYNAMICS rclcpp std_msgs geometry_msgs nav_msgs)
 
 #---------------- ဖျက်ရန် -----------------#
 if(BUILD_TESTING)
