@@ -6,11 +6,9 @@
         "limitSymbolsToIncludedHeaders": false
       },
       "includePath": [
-        "/home/mr_robot/devel_ws/install/vizanti_msgs/include/**",
-        "/home/mr_robot/devel_ws/install/teleop_twist_joy/include/**",
-        "/home/mr_robot/devel_ws/install/stm32f1_system_interface/include/**",
         "/opt/ros/humble/include/**",
-        "/home/mr_robot/qt_ros_ws/src/test1/include/**",
+        "/home/mr_robot/qt_ros_ws/src/rom_dynamics_v1/include/**",
+        "/home/mr_robot/qt_ros_ws/src/rom_dynamics_v2/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",
