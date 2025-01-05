@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+extern void shutdown_thread();
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     setWindowTitle("ROM Dynamics Company's Robot Suite");
@@ -54,9 +55,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
-    QPointF clickedPoint = ui->graphicsView->mapFromGlobal(event->globalPos());
-    double mapX = (clickedPoint.x() * this->map_resolution_) + this->map_origin_x_;
-    double mapY = (clickedPoint.y() * this->map_resolution_) + this->map_origin_y_;
+    if (!ui->graphicsView) {
+        ui->statusLabel->setText("GraphicsView is null.");
+        return;
+    }
+
+    if (!ui->graphicsView->scene()) {
+        ui->statusLabel->setText("GraphicsView has no scene."); 
+        return;
+    }
+    // Get the position of the click relative to the QGraphicsView
+    QPoint viewPoint = ui->graphicsView->mapFrom(this, event->pos());
+
+    // Map the QGraphicsView coordinates to the QGraphicsScene coordinates
+    QPointF scenePoint = ui->graphicsView->mapToScene(viewPoint);
+
+    // Check if the scenePoint is within the scene's bounds
+    QRectF sceneBounds = ui->graphicsView->scene()->sceneRect();
+    if (!sceneBounds.contains(scenePoint)) {
+        // If the point is outside the scene, ignore it
+        ui->statusLabel->setText("Click outside scene bounds ignored.");
+        //return;
+    }
+    else {
+        ui->statusLabel->setText("Click inside scene bounds.");
+
+        // Convert the scene coordinates to map coordinates
+    double mapX = (scenePoint.x() * this->map_resolution_) + this->map_origin_x_;
+    double mapY = (scenePoint.y() * this->map_resolution_) + this->map_origin_y_;
 
     // Publish the pose
     auto pose = geometry_msgs::msg::PoseStamped();
@@ -66,10 +92,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     pose.pose.position.y = mapY;
     pose.pose.orientation.w = 1.0; // Neutral orientation
     pose_publisher_->publish(pose);
+
+    // Update the status label with the calculated position
     ui->statusLabel->setText(QString::asprintf("x: %.5f, y: %.5f, phi: %d", mapX, mapY, 0));
-
+    }
 }
-
 
 void MainWindow::updateMap(const QImage& mapImage, const double map_origin_x, const double map_origin_y, const double map_resolution) 
 {
@@ -104,9 +131,9 @@ void MainWindow::sendMappingMode() {
 
         mode_publisher_->publish(msg);
         ui->statusLabel->setText("Changing Mapping Mode...");
-        ui->mappingBtn->setStyleSheet("background-color: green; font-weight: bold;");
-        ui->navigationBtn->setStyleSheet("background-color: none; font-weight: bold;");
-        ui->remappingBtn->setStyleSheet("background-color: none; font-weight: bold;");
+        ui->mappingBtn->setStyleSheet("background-color: green;");
+        ui->navigationBtn->setStyleSheet("background-color: none;");
+        ui->remappingBtn->setStyleSheet("background-color: none;");
     }
 }
 
@@ -123,9 +150,9 @@ void MainWindow::sendNavigationMode() {
 
         mode_publisher_->publish(msg);
         ui->statusLabel->setText("Changing Navigation Mode...");
-        ui->mappingBtn->setStyleSheet("background-color: none; font-weight: bold;");
-        ui->navigationBtn->setStyleSheet("background-color: green; font-weight: bold;");
-        ui->remappingBtn->setStyleSheet("background-color: none; font-weight: bold;");
+        ui->mappingBtn->setStyleSheet("background-color: none;");
+        ui->navigationBtn->setStyleSheet("background-color: green;");
+        ui->remappingBtn->setStyleSheet("background-color: none;");
     }
 }
 
@@ -142,16 +169,23 @@ void MainWindow::sendRemappingMode() {
 
         mode_publisher_->publish(msg);
         ui->statusLabel->setText("Changing Remapping Mode...");
-        ui->mappingBtn->setStyleSheet("background-color: none; font-weight: bold;");
-        ui->navigationBtn->setStyleSheet("background-color: none; font-weight: bold;");
-        ui->remappingBtn->setStyleSheet("background-color: green; font-weight: bold;");
+        ui->mappingBtn->setStyleSheet("background-color: none;");
+        ui->navigationBtn->setStyleSheet("background-color: none;");
+        ui->remappingBtn->setStyleSheet("background-color: green;");
     }
 }
 
 
 void MainWindow::on_shutdownBtn_clicked()
 {
-  ui->statusLabel->setText("Shutdown 0 ...");
+    ui->statusLabel->setText("Shutdown 0 ...");
+
+    shutdown_thread();
+
+    // Perform any additional cleanup if needed
+    rclcpp::shutdown(); // Stop the ROS 2 node and executor
+
+    QApplication::quit(); // Exit the application
 }
 
 
@@ -159,3 +193,5 @@ void MainWindow::on_btnEstop_clicked()
 {
   ui->statusLabel->setText("Activating E-Stop ...");
 }
+
+

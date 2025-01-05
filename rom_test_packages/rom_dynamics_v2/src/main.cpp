@@ -10,6 +10,9 @@
 
 #include <QScreen>
 
+std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> executor = nullptr;
+std::thread executor_thread;
+
 int main(int argc, char *argv[])
 {
     setvbuf(stdout, nullptr, _IONBF, BUFSIZ); // stdout IO NO buffer
@@ -17,7 +20,6 @@ int main(int argc, char *argv[])
 
     std::shared_ptr<Publisher> cmd_publisher = nullptr;
     std::shared_ptr<Subscriber> subscriber = nullptr;
-    std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> executor = nullptr;
 
     executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
 
@@ -31,11 +33,22 @@ int main(int argc, char *argv[])
     executor->add_node(cmd_publisher);
     executor->add_node(subscriber);
     executor->add_node(map_subscriber);
-
-    std::thread executor_thread([executor](){executor->spin();});
+    
+    executor_thread = std::thread([executor]() { executor->spin(); });
+    //std::thread executor_thread([executor](){executor->spin();});
 
     // QT APPLICATION //
     QApplication a(argc, argv);
+    a.setStyleSheet(
+        "QPushButton {"
+        "    border: 3px solid #8f8f91;"
+        "    border-radius: 25px;" // Make buttons round
+        "     font-weight: bold;"
+        "}"
+        "QLabel {"
+        "    border-radius: 25px;" // Make buttons round
+        "}"
+    );
 
     // Get primary screen's resolution
     //QScreen *screen = a.primaryScreen();
@@ -71,4 +84,16 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
+void shutdown_thread()
+{
+    // Stop the ROS executor thread safely
+    if (executor) {
+        executor->cancel(); // Signal the executor to stop
+    }
 
+    if (executor_thread.joinable()) {
+        executor_thread.join(); // Wait for the thread to finish
+    }
+
+    rclcpp::shutdown();
+}

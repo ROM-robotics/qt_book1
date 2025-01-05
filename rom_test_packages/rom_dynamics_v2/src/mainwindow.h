@@ -42,6 +42,7 @@ class MainWindow : public QMainWindow
     private slots:
         void on_shutdownBtn_clicked();
         void on_btnEstop_clicked();
+        
     
     private:
         std::shared_ptr<Ui::MainWindow> ui = nullptr;

@@ -245,7 +245,7 @@ color: rgb(246, 245, 244);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Current Position</string>
+     <string notr="true">Robot Position</string>
     </property>
    </widget>
    <widget class="QLabel" name="xLabel">
@@ -256,6 +256,12 @@ color: rgb(246, 245, 244);</string>
       <width>129</width>
       <height>34</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <bold>false</bold>
+     </font>
     </property>
     <property name="text">
      <string>x :</string>
@@ -270,6 +276,12 @@ color: rgb(246, 245, 244);</string>
       <height>34</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
     <property name="text">
      <string>y :</string>
     </property>
@@ -282,6 +294,12 @@ color: rgb(246, 245, 244);</string>
       <width>129</width>
       <height>34</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <bold>false</bold>
+     </font>
     </property>
     <property name="text">
      <string>ϕ :</string>
