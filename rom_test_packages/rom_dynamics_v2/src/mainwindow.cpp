@@ -4,11 +4,33 @@
 extern void shutdown_thread();
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
+
+//    // Get the primary screen's resolution
+//    QScreen *screen = QGuiApplication::primaryScreen();
+//    QRect screenGeometry = screen->availableGeometry();
+
+//    // Extract screen width and height
+//    int screenWidth = screenGeometry.width();
+//    int screenHeight = screenGeometry.height();
+
+//    // Set widget size as a percentage of screen size (e.g., 50% width, 50% height)
+//    int widgetWidth = static_cast<int>(screenWidth * 0.5);
+//    int widgetHeight = static_cast<int>(screenHeight * 0.5);
+
+//    // Initialize UI first
+//    setWindowTitle("ROM Dynamics Company's Robot Suite");
+//    ui = std::make_shared<Ui::MainWindow>();
+//    ui->setupUi(this);
+
+//    // Now resize and center the window
+//    this->resize(widgetWidth, widgetHeight);
+//    this->move((screenWidth - widgetWidth) / 2, (screenHeight - widgetHeight) / 2);
+
     setWindowTitle("ROM Dynamics Company's Robot Suite");
     ui = std::make_shared<Ui::MainWindow>();
     ui->setupUi(this);
 
-    //label = ui->subscribedText; // to delete
+//    label = ui->subscribedText; // to delete
 
     node_ = rclcpp::Node::make_shared("rom_qt");
     mode_publisher_ = node_->create_publisher<std_msgs::msg::String>("switch_mode", 10);
