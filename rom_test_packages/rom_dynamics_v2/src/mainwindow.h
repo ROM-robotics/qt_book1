@@ -33,7 +33,7 @@ class MainWindow : public QMainWindow
     
     public slots:
         void DisplaySubscription(const QString &log);
-        void updateMap(const QImage& mapImage, const double map_origin_x, const double map_origin_y, const double map_resolution);
+        void updateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
         
         void sendMappingMode();
         void sendNavigationMode();
@@ -59,8 +59,8 @@ class MainWindow : public QMainWindow
         double map_origin_x_ = 0;
         double map_origin_y_ = 0;
         double map_resolution_ = 0;
-        int map_width_ = 0;
-        int map_height_ = 0;
+        // int map_width_ = 0;
+        // int map_height_ = 0;
 };
 
 #endif // MAINWINDOW_H

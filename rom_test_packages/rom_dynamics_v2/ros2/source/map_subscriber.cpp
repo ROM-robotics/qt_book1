@@ -9,12 +9,10 @@ MapSubscriber::MapSubscriber(QObject* parent) : QObject(parent), Node("map_handl
 
 void MapSubscriber::mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg) 
 {
+    /*
     double map_origin_x   = msg->info.origin.position.x;
     double map_origin_y   = msg->info.origin.position.y;
     double map_resolution = msg->info.resolution;
-
-    //int width  = msg->info.width;
-    //int height = msg->info.height;
 
     // Convert OccupancyGrid to an image
     QImage mapImage(msg->info.width, msg->info.height, QImage::Format_RGB888);
@@ -25,9 +23,10 @@ void MapSubscriber::mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr ms
             QColor color = (value == 0) ? Qt::white : (value == 100) ? Qt::black : Qt::gray;
             mapImage.setPixel(x, y, color.rgb());
         }
-    }
+    }*/
 
-    emit mapUpdated(mapImage, map_origin_x, map_origin_y, map_resolution); // Emit updated map as QImage
+    //emit updateMap(mapImage, map_origin_x, map_origin_y, map_resolution); // Emit updated map as QImage
+    emit updateMap(msg);
 
 }
    

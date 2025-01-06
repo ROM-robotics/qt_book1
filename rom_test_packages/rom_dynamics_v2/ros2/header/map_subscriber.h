@@ -14,8 +14,8 @@ public:
     ~MapSubscriber() {}
 
 signals:
-    void mapUpdated(const QImage& mapImage, const double map_origin_x = 0, const double map_origin_y = 0, const double map_resolution = 0); // Signal to notify about map updates
-
+    //void updateMap(const QImage& mapImage, const double map_origin_x = 0, const double map_origin_y = 0, const double map_resolution = 0); // Signal to notify about map updates
+    void updateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
 private:
     void mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
 

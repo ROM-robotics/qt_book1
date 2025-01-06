@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(mainWindow.getUi()->btnStop, &QPushButton::clicked, cmd_publisher.get(), &Publisher::setStop);
 
-    QObject::connect(map_subscriber.get(), &MapSubscriber::mapUpdated, &mainWindow, &MainWindow::updateMap);
+    QObject::connect(map_subscriber.get(), &MapSubscriber::updateMap, &mainWindow, &MainWindow::updateMap);
 
     return a.exec();
 }

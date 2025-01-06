@@ -1,7 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <cmath> // For atan2 and M_PI
+
+QPointF initialScenePoint; // Store the initial point
+auto clicked_pose = geometry_msgs::msg::PoseStamped();
+
+
 extern void shutdown_thread();
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     setWindowTitle("ROM Dynamics Company's Robot Suite");
@@ -9,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     ui->setupUi(this);
 
     //label = ui->subscribedText; // to delete
+    clicked_pose.header.frame_id = "map";
 
     node_ = rclcpp::Node::make_shared("rom_qt");
     mode_publisher_ = node_->create_publisher<std_msgs::msg::String>("switch_mode", 10);
@@ -51,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     );
 
     current_mode_ = "navi";
+
+    qRegisterMetaType<nav_msgs::msg::OccupancyGrid::SharedPtr>("nav_msgs::msg::OccupancyGrid::SharedPtr");
 }
 
 
@@ -85,21 +95,36 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     double mapY = (scenePoint.y() * this->map_resolution_) + this->map_origin_y_;
 
     // Publish the pose
-    auto pose = geometry_msgs::msg::PoseStamped();
-    pose.header.frame_id = "map";
-    pose.header.stamp = rclcpp::Clock().now();
-    pose.pose.position.x = mapX;
-    pose.pose.position.y = mapY;
-    pose.pose.orientation.w = 1.0; // Neutral orientation
-    pose_publisher_->publish(pose);
+    
+    clicked_pose.header.stamp = rclcpp::Clock().now();
+    clicked_pose.pose.position.x = mapX;
+    clicked_pose.pose.position.y = mapY;
+    clicked_pose.pose.orientation.w = 1.0; // Neutral orientation
+    pose_publisher_->publish(clicked_pose);
 
     // Update the status label with the calculated position
     ui->statusLabel->setText(QString::asprintf("x: %.5f, y: %.5f, phi: %d", mapX, mapY, 0));
     }
 }
 
-void MainWindow::updateMap(const QImage& mapImage, const double map_origin_x, const double map_origin_y, const double map_resolution) 
+
+
+void MainWindow::updateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg) 
 {
+    double map_origin_x   = msg->info.origin.position.x;
+    double map_origin_y   = msg->info.origin.position.y;
+    double map_resolution = msg->info.resolution;
+
+    // Convert OccupancyGrid to an image
+    QImage mapImage(msg->info.width, msg->info.height, QImage::Format_RGB888);
+    for (size_t y = 0; y < msg->info.height; ++y) {
+        for (size_t x = 0; x < msg->info.width; ++x) {
+            int index = y * msg->info.width + x;
+            int value = msg->data[index];
+            QColor color = (value == 0) ? Qt::white : (value == 100) ? Qt::black : Qt::gray;
+            mapImage.setPixel(x, y, color.rgb());
+        }
+    }
     this->map_resolution_ = map_resolution;
     this->map_origin_x_ = map_origin_x;
     this->map_origin_y_ = map_origin_y;
