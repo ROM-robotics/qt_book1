@@ -13,7 +13,6 @@
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <std_msgs/msg/string.hpp>
 #include <nav_msgs/msg/occupancy_grid.hpp>
-#include "rom_interfaces/srv/which_maps.hpp"
 
 // header 
 QT_BEGIN_NAMESPACE
@@ -57,9 +56,6 @@ class MainWindow : public QMainWindow
         rclcpp::Node::SharedPtr node_;
         rclcpp::Publisher<std_msgs::msg::String>::SharedPtr mode_publisher_;
         rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_publisher_;
-        
-        // rclcpp::ServiceClient<std_srvs::srv::SetBool>::SharedPtr service_client_;
-        rclcpp::Client<rom_interfaces::srv::WhichMaps>::SharedPtr client_;
 
         std::string current_mode_;
 

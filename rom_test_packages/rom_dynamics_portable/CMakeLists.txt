@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(rom_dynamics_v2)
+project(rom_dynamics_portable)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -20,7 +20,7 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
-#find_package(rom_interfaces REQUIRED)
+find_package(rom_interfaces REQUIRED)
 
 find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
@@ -50,8 +50,6 @@ add_executable(ROM_DYNAMICS
     ros2/source/subscriber.cpp
     ros2/header/map_subscriber.h
     ros2/source/map_subscriber.cpp
-    ros2/header/map_service_client.h
-    ros2/source/map_service_client.cpp
     ${UI_HEADERS}
 )
 

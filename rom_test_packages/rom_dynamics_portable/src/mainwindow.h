@@ -13,7 +13,6 @@
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <std_msgs/msg/string.hpp>
 #include <nav_msgs/msg/occupancy_grid.hpp>
-#include "rom_interfaces/srv/which_maps.hpp"
 
 // header 
 QT_BEGIN_NAMESPACE
@@ -31,11 +30,9 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = nullptr);
         //~MainWindow() { delete ui;}
         std::shared_ptr<Ui::MainWindow> getUi() { return ui; }
-        void mousePressEvent(QMouseEvent *event);
     
     public slots:
         void DisplaySubscription(const QString &log);
-        void updateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
         
         void sendMappingMode();
         void sendNavigationMode();
@@ -56,10 +53,7 @@ class MainWindow : public QMainWindow
 
         rclcpp::Node::SharedPtr node_;
         rclcpp::Publisher<std_msgs::msg::String>::SharedPtr mode_publisher_;
-        rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_publisher_;
-        
-        // rclcpp::ServiceClient<std_srvs::srv::SetBool>::SharedPtr service_client_;
-        rclcpp::Client<rom_interfaces::srv::WhichMaps>::SharedPtr client_;
+        //rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_publisher_;
 
         std::string current_mode_;
 

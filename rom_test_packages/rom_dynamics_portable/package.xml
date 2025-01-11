@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>rom_dynamics_v2</name>
+  <name>rom_dynamics_portable</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="server01.psa1981@gmail.com">mr_robot</maintainer>
@@ -14,7 +14,7 @@
     <depend>std_srvs</depend>
     <depend>geometry_msgs</depend>
     <depend>nav_msgs</depend>
-    <!-- <depend>rom_interfaces</depend>-->
+    <depend>rom_interfaces</depend>
 
     <depend>rviz_common</depend>
     <depend>rviz_rendering</depend>

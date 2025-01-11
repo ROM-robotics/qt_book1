@@ -6,8 +6,6 @@
 QPointF initialScenePoint; // Store the initial point
 auto clicked_pose = geometry_msgs::msg::PoseStamped();
 
-auto request = std::make_shared<rom_interfaces::srv::WhichMaps::Request>();
-
 extern void shutdown_thread();
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -21,15 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     node_ = rclcpp::Node::make_shared("rom_qt");
     mode_publisher_ = node_->create_publisher<std_msgs::msg::String>("switch_mode", 10);
-    pose_publisher_ = node_->create_publisher<geometry_msgs::msg::PoseStamped>("pose", 10);
-    client_         = node_->create_client<rom_interfaces::srv::WhichMaps>("which_maps");
 
-    client_ = node_->create_client<rom_interfaces::srv::WhichMaps>("which_maps");
-    // auto request = std::make_shared<rom_interfaces::srv::WhichMaps::Request>();
-    
-    // auto result = client_->async_send_request(request);
-
-    request->map_request = "which_maps";
 
     connect(ui->mappingBtn, &QPushButton::clicked, this, &MainWindow::sendMappingMode);
     connect(ui->navigationBtn, &QPushButton::clicked, this, &MainWindow::sendNavigationMode);
@@ -42,55 +32,46 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     );
     ui->btnEstop->setStyleSheet(
     "QPushButton:pressed {"
-    "    background-color: rgb(255, 200, 200);"        // Background color when pressed
+    "    background-color: rgb(255, 200, 200);"       
     "}"
     );
     ui->btnStop->setStyleSheet(
     "QPushButton:pressed {"
-    "    background-color: rgb(255, 200, 200);"        // Background color when pressed
+    "    background-color: rgb(255, 200, 200);"       
     "}"
     );
 
     ui->btnForward->setStyleSheet(
     "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);"        // Background color when pressed
+    "    background-color: rgb(200, 255, 200);"      
     "}"
     );
     ui->btnLeft->setStyleSheet(
     "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);"        // Background color when pressed
+    "    background-color: rgb(200, 255, 200);"       
     "}"
     );
     ui->btnRight->setStyleSheet(
     "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);"        // Background color when pressed
+    "    background-color: rgb(200, 255, 200);"        
     "}"
     );
 
-    // ui->saveMapBtn->setStyleSheet(
-    // "QPushButton:pressed {"
-    // "    background-color: rgb(200, 255, 200);"        // Background color when pressed
-    // "}"
-    // "QPushButton:hover {"
-    // "    background-color: green);"        // Background color when pressed
-    // "}"
-    // );
-    // ui->openMapBtn->setStyleSheet(
-    // "QPushButton:pressed {"
-    // "    background-color: rgb(200, 255, 200);"        // Background color when pressed
-    // "}"
-    // "QPushButton:hover {"
-    // "    background-color: green);"        // Background color when pressed
-    // "}"
-    // );
-    // ui->selectMapBtn->setStyleSheet(
-    // "QPushButton:pressed {"
-    // "    background-color: rgb(200, 255, 200);"        // Background color when pressed
-    // "}"
-    // "QPushButton:hover {"
-    // "    background-color: green);"        // Background color when pressed
-    // "}"
-    // );
+    ui->saveMapBtn->setStyleSheet(
+    "QPushButton:pressed {"
+    "    background-color: rgb(200, 255, 200);" 
+    "}"       
+    );
+    ui->openMapBtn->setStyleSheet(
+    "QPushButton:pressed {"
+    "    background-color: rgb(200, 255, 200);"       
+    "}"
+    );
+    ui->selectMapBtn->setStyleSheet(
+    "QPushButton:pressed {"
+    "    background-color: rgb(200, 255, 200);"       
+    "}"
+    );
 
     current_mode_ = "navi";
 

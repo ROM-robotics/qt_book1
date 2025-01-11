@@ -3,7 +3,6 @@
 #include "cmd_publisher.h"
 #include "subscriber.h"
 #include "map_subscriber.h"
-#include "map_service_client.h"
 
 #include <QtWidgets/QApplication>
 #include <QObject>
@@ -19,24 +18,21 @@ int main(int argc, char *argv[])
     rclcpp::init(argc, argv);
 
     std::shared_ptr<Publisher> cmd_publisher = nullptr;
-    std::shared_ptr<Subscriber> subscriber = nullptr;
-    std::shared_ptr<MapServiceClient> service_client = nullptr;
+    //std::shared_ptr<Subscriber> subscriber = nullptr;
 
     executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
 
     cmd_publisher = std::make_shared<Publisher>("cmd_vel_from_qt");
 
-    subscriber = std::make_shared<Subscriber>("chatter"); // to delete
-
-    service_client = std::make_shared<MapServiceClient>("which_maps");
+    //subscriber = std::make_shared<Subscriber>("chatter"); // to delete
 
     auto map_subscriber = std::make_shared<MapSubscriber>();
     //MapViewer mapViewer;
 
     executor->add_node(cmd_publisher);
-    executor->add_node(subscriber);
     executor->add_node(map_subscriber);
-    executor->add_node(service_client);
+    //executor->add_node(subscriber);
+    
     
     executor_thread = std::thread([executor]() { executor->spin(); });
     //std::thread executor_thread([executor](){executor->spin();});
@@ -64,7 +60,7 @@ int main(int argc, char *argv[])
     // subscriber က shared_ptr , အဲ့တာကိုမှ .get() နဲ့ raw pointer of မူလ Subscriber Object ကို ဆွဲထုတ်တာ။
     // logReceived က Subscriber ဆီက signal ပါ။
     // နောက် လက်ခံမဲ့ object ရယ်, သူ့ရဲ့ slot function ရယ်ပေါ့။
-    QObject::connect(subscriber.get(), &Subscriber::logReceived, &mainWindow, &MainWindow::DisplaySubscription);
+    // QObject::connect(subscriber.get(), &Subscriber::logReceived, &mainWindow, &MainWindow::DisplaySubscription);
 
     // ဒါရဖို့ mainwindow ရဲ့ ui ကို unique_ptr ကနေ shared_ptr ပြောင်းပြီး pointer ကို .getUi() နဲ့ ရယူတယ်။
     QObject::connect(mainWindow.getUi()->btnForward, &QPushButton::clicked, cmd_publisher.get(), &Publisher::setForward);
@@ -77,11 +73,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(map_subscriber.get(), &MapSubscriber::updateMap, &mainWindow, &MainWindow::updateMap);
 
-    //
-    QObject::connect(mainWindow.getUi()->saveMapBtn, &QPushButton::clicked, service_client.get(), &MapServiceClient::callServiceSave);
-    QObject::connect(mainWindow.getUi()->openMapBtn, &QPushButton::clicked, service_client.get(), &MapServiceClient::callServiceOpen);
-    QObject::connect(mainWindow.getUi()->selectMapBtn, &QPushButton::clicked, service_client.get(), &MapServiceClient::callServiceSelect);
-
+   
     return a.exec();
 }
 
