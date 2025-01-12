@@ -4,8 +4,10 @@
 
 #include <QtWidgets>
 #include <QtWidgets/QMainWindow>
+#include <QThread>
 #include <QLabel>
-
+#include <QPushButton>
+#include <QLineEdit>
 #include "ui_mainwindow.h"
 
 #include <rclcpp/rclcpp.hpp>
@@ -14,7 +16,8 @@
 #include <std_msgs/msg/string.hpp>
 #include <nav_msgs/msg/occupancy_grid.hpp>
 
-// header 
+#include <example_interfaces/srv/add_two_ints.hpp>
+
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
@@ -22,13 +25,33 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
+class ServiceClient : public QObject {
+    Q_OBJECT
+
+public:
+    explicit ServiceClient();
+    ~ServiceClient();
+
+    void sendRequest(int a, int b);
+
+signals:
+    void responseReceived(int sum);
+
+private:
+    rclcpp::Node::SharedPtr node;
+    rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr client;
+    std::thread rosThread;
+
+    void spin();
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
     public:
         explicit MainWindow(QWidget *parent = nullptr);
-        //~MainWindow() { delete ui;}
+        ~MainWindow();
         std::shared_ptr<Ui::MainWindow> getUi() { return ui; }
     
     public slots:
@@ -45,24 +68,27 @@ class MainWindow : public QMainWindow
     private slots:
         void on_shutdownBtn_clicked();
         void on_btnEstop_clicked();
-        
+
+    private slots:
+        //void onSendRequest();
+        void onResponseReceived(int sum);  
     
     private:
         std::shared_ptr<Ui::MainWindow> ui = nullptr;
-        QLabel* label = nullptr;
-
-        rclcpp::Node::SharedPtr node_;
-        rclcpp::Publisher<std_msgs::msg::String>::SharedPtr mode_publisher_;
-        //rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_publisher_;
+        
+        QPushButton *sendMappingBtnPtr_;
+        QPushButton *sendNavigationBtnPtr_;
+        QPushButton *sendRemappingBtnPtr_;
 
         std::string current_mode_;
+        // QPushButton *saveMapBtnPtr_;
+        // QPushButton *openMapBtnPtr_;
+        // QPushButton *selectMapBtn;
 
-        // map
-        double map_origin_x_ = 0;
-        double map_origin_y_ = 0;
-        double map_resolution_ = 0;
-        // int map_width_ = 0;
-        // int map_height_ = 0;
+        QLabel* statusLabelPtr_ = nullptr;
+
+        ServiceClient *service_client_;
+        QThread *rosThread;
 };
 
 #endif // MAINWINDOW_H

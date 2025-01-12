@@ -105,7 +105,7 @@
      <rect>
       <x>1030</x>
       <y>80</y>
-      <width>171</width>
+      <width>201</width>
       <height>71</height>
      </rect>
     </property>
@@ -118,7 +118,7 @@
      <rect>
       <x>1250</x>
       <y>80</y>
-      <width>171</width>
+      <width>191</width>
       <height>71</height>
      </rect>
     </property>
@@ -129,9 +129,9 @@
    <widget class="QPushButton" name="saveMapBtn">
     <property name="geometry">
      <rect>
-      <x>1480</x>
+      <x>1460</x>
       <y>80</y>
-      <width>171</width>
+      <width>191</width>
       <height>71</height>
      </rect>
     </property>
@@ -208,10 +208,10 @@
    <widget class="QLabel" name="statusLabel">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>530</y>
-      <width>491</width>
-      <height>91</height>
+      <x>390</x>
+      <y>200</y>
+      <width>691</width>
+      <height>291</height>
      </rect>
     </property>
     <property name="font">

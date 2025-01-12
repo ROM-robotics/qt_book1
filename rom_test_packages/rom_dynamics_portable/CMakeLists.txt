@@ -21,6 +21,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(rom_interfaces REQUIRED)
+find_package(example_interfaces REQUIRED)
 
 find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
@@ -44,19 +45,13 @@ add_executable(ROM_DYNAMICS
     src/mainwindow.h
     src/main.cpp
     src/mainwindow.cpp
-    ros2/header/cmd_publisher.h
-    ros2/source/cmd_publisher.cpp
-    ros2/header/subscriber.h
-    ros2/source/subscriber.cpp
-    ros2/header/map_subscriber.h
-    ros2/source/map_subscriber.cpp
     ${UI_HEADERS}
 )
 
 
 target_link_libraries(ROM_DYNAMICS ${Qt5Core_LIBRARIES})
 target_link_libraries(ROM_DYNAMICS ${Qt5Widgets_LIBRARIES})
-ament_target_dependencies(ROM_DYNAMICS rclcpp std_msgs geometry_msgs nav_msgs)# rom_interfaces)
+ament_target_dependencies(ROM_DYNAMICS rclcpp std_msgs geometry_msgs nav_msgs example_interfaces)# rom_interfaces)
 
 #---------------- END -----------------#
 

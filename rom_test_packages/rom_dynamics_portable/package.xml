@@ -15,6 +15,7 @@
     <depend>geometry_msgs</depend>
     <depend>nav_msgs</depend>
     <depend>rom_interfaces</depend>
+    <depend>example_interfaces</depend>
 
     <depend>rviz_common</depend>
     <depend>rviz_rendering</depend>
