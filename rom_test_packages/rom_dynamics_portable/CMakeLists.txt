@@ -51,7 +51,7 @@ add_executable(ROM_DYNAMICS
 
 target_link_libraries(ROM_DYNAMICS ${Qt5Core_LIBRARIES})
 target_link_libraries(ROM_DYNAMICS ${Qt5Widgets_LIBRARIES})
-ament_target_dependencies(ROM_DYNAMICS rclcpp std_msgs geometry_msgs nav_msgs example_interfaces)# rom_interfaces)
+ament_target_dependencies(ROM_DYNAMICS rclcpp std_msgs geometry_msgs nav_msgs example_interfaces rom_interfaces)
 
 #---------------- END -----------------#
 

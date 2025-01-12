@@ -16,7 +16,8 @@
 #include <std_msgs/msg/string.hpp>
 #include <nav_msgs/msg/occupancy_grid.hpp>
 
-#include <example_interfaces/srv/add_two_ints.hpp>
+// #include <example_interfaces/srv/add_two_ints.hpp>
+#include <rom_interfaces/srv/which_maps.hpp>
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -32,14 +33,15 @@ public:
     explicit ServiceClient();
     ~ServiceClient();
 
-    void sendRequest(int a, int b);
+    void sendRequest(const std::string& request_string, const std::string& optional_param);
 
 signals:
-    void responseReceived(int sum);
+    void responseReceived(int status);
 
 private:
     rclcpp::Node::SharedPtr node;
-    rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr client;
+    // rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr client;
+    rclcpp::Client<rom_interfaces::srv::WhichMaps>::SharedPtr client;
     std::thread rosThread;
 
     void spin();
@@ -61,9 +63,9 @@ class MainWindow : public QMainWindow
         void sendNavigationMode();
         void sendRemappingMode();
 
-        // void saveMapClicked();
-        // void openMapClicked();
-        // void selectMapClicked();
+        void saveMapClicked();
+        void openMapClicked();
+        void selectMapClicked();
         
     private slots:
         void on_shutdownBtn_clicked();
@@ -81,9 +83,9 @@ class MainWindow : public QMainWindow
         QPushButton *sendRemappingBtnPtr_;
 
         std::string current_mode_;
-        // QPushButton *saveMapBtnPtr_;
-        // QPushButton *openMapBtnPtr_;
-        // QPushButton *selectMapBtn;
+        QPushButton *saveMapBtnPtr_;
+        QPushButton *openMapBtnPtr_;
+        QPushButton *selectMapBtnPtr_;
 
         QLabel* statusLabelPtr_ = nullptr;
 
