@@ -28,34 +28,28 @@ class MainWindow : public QMainWindow
 
     public:
         explicit MainWindow(QWidget *parent = nullptr);
-        //~MainWindow() { delete ui;}
-        std::shared_ptr<Ui::MainWindow> getUi() { return ui; }
+
         void mousePressEvent(QMouseEvent *event);
+        void mouseReleaseEvent(QMouseEvent *event);
+        void wheelEvent(QWheelEvent *event);
+        
+        bool checkGraphicViewAndScene();
+        void setScrollDragMode(bool state);
     
     public slots:
-        void DisplaySubscription(const QString &log);
-        void updateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
-        
-        void sendMappingMode();
-        void sendNavigationMode();
-        void sendRemappingMode();
-
-        // void saveMapClicked();
-        // void openMapClicked();
-        // void selectMapClicked();
+        void onUpdateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
+        void onZoomButtonClicked();
+        void onWayPointsButtonClicked();
+        void onWallButtonClicked();
+        void onEraserButtonClicked();
+        void onNormalButtonClicked();
         
     private slots:
-        void on_shutdownBtn_clicked();
-        void on_btnEstop_clicked();
         
     
     private:
         std::shared_ptr<Ui::MainWindow> ui = nullptr;
         QLabel* label = nullptr;
-
-        rclcpp::Node::SharedPtr node_;
-        rclcpp::Publisher<std_msgs::msg::String>::SharedPtr mode_publisher_;
-        rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_publisher_;
 
         std::string current_mode_;
 
@@ -63,8 +57,19 @@ class MainWindow : public QMainWindow
         double map_origin_x_ = 0;
         double map_origin_y_ = 0;
         double map_resolution_ = 0;
-        // int map_width_ = 0;
-        // int map_height_ = 0;
+
+        // 5 modes
+        bool zoom_mode_ = false;
+        bool waypoints_mode_   = false;
+        bool virtual_wall_mode_ = false;
+        bool eraser_mode_ = false;
+        bool normal_mode_ = true;
+
+        QPushButton *zoom_btn_ptr_;
+        QPushButton *waypoints_btn_ptr_;
+        QPushButton *virtual_wall_btn_ptr_;
+        QPushButton *eraser_btn_ptr_;
+        QPushButton *normal_btn_ptr_;
 };
 
 #endif // MAINWINDOW_H

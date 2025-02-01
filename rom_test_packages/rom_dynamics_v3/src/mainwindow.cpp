@@ -3,92 +3,40 @@
 
 #include <cmath> // For atan2 and M_PI
 
-QPointF initialScenePoint; // Store the initial point
+//QPointF initialScenePoint; // Store the initial point
 auto clicked_pose = geometry_msgs::msg::PoseStamped();
 
 extern void shutdown_thread();
 
+#define ROM_Q_DEBUG 1
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     setWindowTitle("ROM Dynamics Company's Robot Suite");
     ui = std::make_shared<Ui::MainWindow>();
     ui->setupUi(this);
 
-    //label = ui->subscribedText; // to delete
     clicked_pose.header.frame_id = "map";
 
-    node_ = rclcpp::Node::make_shared("rom_qt");
-    mode_publisher_ = node_->create_publisher<std_msgs::msg::String>("switch_mode", 10);
-
-
-    connect(ui->mappingBtn, &QPushButton::clicked, this, &MainWindow::sendMappingMode);
-    connect(ui->navigationBtn, &QPushButton::clicked, this, &MainWindow::sendNavigationMode);
-    connect(ui->remappingBtn, &QPushButton::clicked, this, &MainWindow::sendRemappingMode);
-
-    ui->shutdownBtn->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(255, 200, 200);"        // Background color when pressed
-    "}"
-    );
-    ui->btnEstop->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(255, 200, 200);"       
-    "}"
-    );
-    ui->btnStop->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(255, 200, 200);"       
-    "}"
-    );
-
-    ui->btnForward->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);"      
-    "}"
-    );
-    ui->btnLeft->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);"       
-    "}"
-    );
-    ui->btnRight->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);"        
-    "}"
-    );
-
-    ui->saveMapBtn->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);" 
-    "}"       
-    );
-    ui->openMapBtn->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);"       
-    "}"
-    );
-    ui->selectMapBtn->setStyleSheet(
-    "QPushButton:pressed {"
-    "    background-color: rgb(200, 255, 200);"       
-    "}"
-    );
-
-    current_mode_ = "navi";
+    zoom_btn_ptr_ = ui->zoomBtn;
+    waypoints_btn_ptr_ = ui->addWaypointBtn;
+    virtual_wall_btn_ptr_ = ui->addWallBtn;
+    eraser_btn_ptr_ = ui->eraserBtn;
+    normal_btn_ptr_ = ui->normalBtn;
 
     qRegisterMetaType<nav_msgs::msg::OccupancyGrid::SharedPtr>("nav_msgs::msg::OccupancyGrid::SharedPtr");
+
+    connect(zoom_btn_ptr_, &QPushButton::clicked, this, &MainWindow::onZoomButtonClicked);
+    connect(waypoints_btn_ptr_, &QPushButton::clicked, this, &MainWindow::onWayPointsButtonClicked);
+    connect(virtual_wall_btn_ptr_, &QPushButton::clicked, this, &MainWindow::onWallButtonClicked);
+    connect(eraser_btn_ptr_, &QPushButton::clicked, this, &MainWindow::onEraserButtonClicked);
+    connect(normal_btn_ptr_, &QPushButton::clicked, this, &MainWindow::onNormalButtonClicked);
 }
 
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
-    if (!ui->graphicsView) {
-        ui->statusLabel->setText("GraphicsView is null.");
-        return;
-    }
 
-    if (!ui->graphicsView->scene()) {
-        ui->statusLabel->setText("GraphicsView has no scene."); 
-        return;
-    }
+    if(!checkGraphicViewAndScene()) {ui->statusLabel->setText("checkGraphicViewAndScene() not ok."); return; }
+
     // Get the position of the click relative to the QGraphicsView
     QPoint viewPoint = ui->graphicsView->mapFrom(this, event->pos());
 
@@ -100,32 +48,121 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     if (!sceneBounds.contains(scenePoint)) {
         // If the point is outside the scene, ignore it
         ui->statusLabel->setText("Click outside scene bounds ignored.");
-        //return;
+        return;
     }
-    else {
-        ui->statusLabel->setText("Click inside scene bounds.");
+    else 
+    {   // if the point inside the scene, do your work
+        if(zoom_mode_)
+        {
+            if (event->button() == Qt::LeftButton) 
+            {
+                ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+            }
+            QMainWindow::mousePressEvent(event);
 
-        // Convert the scene coordinates to map coordinates
-    double mapX = (scenePoint.x() * this->map_resolution_) + this->map_origin_x_;
-    double mapY = (scenePoint.y() * this->map_resolution_) + this->map_origin_y_;
+            /* mouse scroll */
+            setScrollDragMode(true);
 
-    // Publish the pose
-    
-    clicked_pose.header.stamp = rclcpp::Clock().now();
-    clicked_pose.pose.position.x = mapX;
-    clicked_pose.pose.position.y = mapY;
-    clicked_pose.pose.orientation.w = 1.0; // Neutral orientation
-    pose_publisher_->publish(clicked_pose);
+            return;
+        }
+        else if(waypoints_mode_)
+        {   
+            setScrollDragMode(false);
 
-    // Update the status label with the calculated position
-    ui->statusLabel->setText(QString::asprintf("x: %.5f, y: %.5f, phi: %d", mapX, mapY, 0));
+            ui->statusLabel->setText("Click inside scene bounds.");
+
+            // Convert the scene coordinates to map coordinates
+            double mapX = (scenePoint.x() * this->map_resolution_) + this->map_origin_x_;
+            double mapY = (scenePoint.y() * this->map_resolution_) + this->map_origin_y_;
+
+            // Publish the pose
+            // clicked_pose.header.stamp = rclcpp::Clock().now();
+            // clicked_pose.pose.position.x = mapX;
+            // clicked_pose.pose.position.y = mapY;
+            // clicked_pose.pose.orientation.w = 1.0; // Neutral orientation
+            // pose_publisher_->publish(clicked_pose);
+
+            // Update the status label with the calculated position
+            ui->statusLabel->setText(QString::asprintf("x: %.5f, y: %.5f, phi: %d", mapX, mapY, 0));
+            return;
+        }   
     }
 }
 
 
-
-void MainWindow::updateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg) 
+void MainWindow::onZoomButtonClicked()
 {
+    #ifdef ROM_Q_DEBUG
+        qDebug() << "zoom btn clicked";
+    #endif
+    ui->statusLabel->setText("Zoom Button Clicked.");
+    zoom_mode_ = true;
+    waypoints_mode_   = false;
+    virtual_wall_mode_ = false;
+    eraser_mode_ = false;
+    normal_mode_ = false;
+}
+void MainWindow::onWayPointsButtonClicked()
+{
+    #ifdef ROM_Q_DEBUG
+        qDebug() << "waypoint btn clicked";
+    #endif
+    ui->statusLabel->setText("Waypoints Button Clicked.");
+    zoom_mode_ = false;
+    waypoints_mode_   = true;
+    virtual_wall_mode_ = false;
+    eraser_mode_ = false;
+    normal_mode_ = false;
+}
+void MainWindow::onWallButtonClicked()
+{
+    #ifdef ROM_Q_DEBUG
+        qDebug() << "wall btn clicked";
+    #endif
+    ui->statusLabel->setText("Wall Button Clicked.");
+    zoom_mode_ = false;
+    waypoints_mode_   = false;
+    virtual_wall_mode_ = true;
+    eraser_mode_ = false;
+    normal_mode_ = false;
+}
+void MainWindow::onEraserButtonClicked()
+{
+    #ifdef ROM_Q_DEBUG
+        qDebug() << "Eraser btn clicked";
+    #endif
+    ui->statusLabel->setText("Eraser Button Clicked.");
+    zoom_mode_ = false;
+    waypoints_mode_   = false;
+    virtual_wall_mode_ = false;
+    eraser_mode_ = true;
+    normal_mode_ = false;
+}
+void MainWindow::onNormalButtonClicked()
+{
+    #ifdef ROM_Q_DEBUG
+        qDebug() << "Normal btn clicked";
+    #endif
+    ui->statusLabel->setText("Normal Button Clicked.");
+    zoom_mode_ = false;
+    waypoints_mode_   = false;
+    virtual_wall_mode_ = false;
+    eraser_mode_ = false;
+    normal_mode_ = true;
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
+    if(zoom_mode_)
+    {
+        ui->graphicsView->setDragMode(QGraphicsView::NoDrag);
+        QMainWindow::mouseReleaseEvent(event);
+    }
+}
+
+
+void MainWindow::onUpdateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg) 
+{
+    qDebug() << "onUpdateMap updated";
     double map_origin_x   = msg->info.origin.position.x;
     double map_origin_y   = msg->info.origin.position.y;
     double map_resolution = msg->info.resolution;
@@ -149,89 +186,58 @@ void MainWindow::updateMap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg)
     ui->graphicsView->setScene(scene);
     
     ui->graphicsView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
+
+    qDebug() << "onUpdateMap finished";
 }
 
-
-void MainWindow::DisplaySubscription(const QString &log)
+bool MainWindow::checkGraphicViewAndScene()
 {
-    //ui->statusLabel->setText("hello"); there is no publisher
-}
+    if (!ui->graphicsView) {
+        ui->statusLabel->setText("GraphicsView is null.");
+        return false;
+    }
 
-
-void MainWindow::sendMappingMode() {
-
-    if( current_mode_ == "mapping" ) {
-        return;
-    } else 
-    {
-        current_mode_ = "mapping";
-
-        auto msg = std_msgs::msg::String();
-        msg.data = "mapping";
-
-        mode_publisher_->publish(msg);
-        ui->statusLabel->setText("Changing Mapping Mode...");
-        ui->mappingBtn->setStyleSheet("background-color: green;");
-        ui->navigationBtn->setStyleSheet("background-color: none;");
-        ui->remappingBtn->setStyleSheet("background-color: none;");
+    if (!ui->graphicsView->scene()) {
+        ui->statusLabel->setText("GraphicsView has no scene."); 
+        return false;
+    }
+    else {
+        return true;
     }
 }
 
-
-void MainWindow::sendNavigationMode() {
-    if( current_mode_ == "navi" ) {
-        return;
-    } else 
+void MainWindow::wheelEvent(QWheelEvent *event) 
+{
+    if(zoom_mode_)
     {
-        current_mode_ = "navi";
+        if (ui->graphicsView->scene()) 
+        {
+            constexpr double scaleFactor = 1.2;  // Zoom factor
 
-        auto msg = std_msgs::msg::String();
-        msg.data = "navi";
-
-        mode_publisher_->publish(msg);
-        ui->statusLabel->setText("Changing Navigation Mode...");
-        ui->mappingBtn->setStyleSheet("background-color: none;");
-        ui->navigationBtn->setStyleSheet("background-color: green;");
-        ui->remappingBtn->setStyleSheet("background-color: none;");
+            if (event->angleDelta().y() > 0) {
+                ui->graphicsView->scale(scaleFactor, scaleFactor);  // Zoom in
+            } else {
+                ui->graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);  // Zoom out
+            }
+        }
     }
-}
-
-
-void MainWindow::sendRemappingMode() {
-    if(current_mode_ == "remapping") {
-        return;
-    } else 
-    {
-        current_mode_ = "remapping";
     
-        auto msg = std_msgs::msg::String();
-        msg.data = "remapping";
+}
 
-        mode_publisher_->publish(msg);
-        ui->statusLabel->setText("Changing Remapping Mode...");
-        ui->mappingBtn->setStyleSheet("background-color: none;");
-        ui->navigationBtn->setStyleSheet("background-color: none;");
-        ui->remappingBtn->setStyleSheet("background-color: green;");
+void MainWindow::setScrollDragMode(bool state)
+{
+    if(state)
+    {
+        /* mouse scroll */
+        ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+    }
+    else
+    {
+        /* if not zoom_mode */
+        ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        ui->graphicsView->setDragMode(QGraphicsView::NoDrag);
     }
 }
-
-
-void MainWindow::on_shutdownBtn_clicked()
-{
-    ui->statusLabel->setText("Shutdown 0 ...");
-
-    shutdown_thread();
-
-    // Perform any additional cleanup if needed
-    rclcpp::shutdown(); // Stop the ROS 2 node and executor
-
-    QApplication::quit(); // Exit the application
-}
-
-
-void MainWindow::on_btnEstop_clicked()
-{
-  ui->statusLabel->setText("Activating E-Stop ...");
-}
-
-

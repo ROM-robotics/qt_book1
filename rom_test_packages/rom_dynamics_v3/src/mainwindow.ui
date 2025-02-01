@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1700</width>
-    <height>1440</height>
+    <height>1228</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1700</width>
-    <height>1440</height>
+    <width>1024</width>
+    <height>768</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -54,6 +54,9 @@
       <height>71</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;</string>
+    </property>
     <property name="text">
      <string>Mapping</string>
     </property>
@@ -82,6 +85,9 @@
       <width>261</width>
       <height>71</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;</string>
     </property>
     <property name="text">
      <string>Remapping</string>
@@ -120,19 +126,6 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>1090</y>
-      <width>271</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string notr="true">Robot Position</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="openMapBtn">
     <property name="geometry">
      <rect>
@@ -142,106 +135,49 @@
       <height>71</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;</string>
+    </property>
     <property name="text">
      <string>Open Maps</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="selectMapBtn">
+   <widget class="QPushButton" name="grootBtn">
     <property name="geometry">
      <rect>
-      <x>1250</x>
+      <x>1490</x>
       <y>80</y>
       <width>171</width>
       <height>71</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;</string>
+    </property>
     <property name="text">
-     <string>Select Map</string>
+     <string>Groot</string>
     </property>
    </widget>
    <widget class="QPushButton" name="saveMapBtn">
     <property name="geometry">
      <rect>
-      <x>1480</x>
+      <x>1260</x>
       <y>80</y>
       <width>171</width>
       <height>71</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;</string>
+    </property>
     <property name="text">
      <string>Save Map</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="xLabel">
-    <property name="geometry">
-     <rect>
-      <x>92</x>
-      <y>1150</y>
-      <width>129</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>x :</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="yLabel">
-    <property name="geometry">
-     <rect>
-      <x>92</x>
-      <y>1230</y>
-      <width>129</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>y :</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="yValueLabel">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>1230</y>
-      <width>271</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>sync ...</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="xValueLabel">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>1150</y>
-      <width>271</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>sync ...</string>
     </property>
    </widget>
    <widget class="QLabel" name="statusLabel">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>770</x>
       <y>960</y>
       <width>491</width>
       <height>91</height>
@@ -255,9 +191,11 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #000000
-;
-color: rgb(246, 245, 244);</string>
+     <string notr="true">background-color: #2E3436 ;
+color: rgb(246, 245, 244);
+border: 1px solid gray;
+padding-top: 10px;
+padding-left: 20px;</string>
     </property>
     <property name="text">
      <string/>
@@ -266,24 +204,11 @@ color: rgb(246, 245, 244);</string>
      <number>10</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="shutdownBtn">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>960</y>
-      <width>221</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Shutdown</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btnEstop">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>960</y>
+      <x>830</x>
+      <y>1090</y>
       <width>221</width>
       <height>91</height>
      </rect>
@@ -296,9 +221,9 @@ color: rgb(246, 245, 244);</string>
     <property name="geometry">
      <rect>
       <x>1350</x>
-      <y>1290</y>
+      <y>1087</y>
       <width>101</width>
-      <height>101</height>
+      <height>100</height>
      </rect>
     </property>
     <property name="font">
@@ -308,15 +233,18 @@ color: rgb(246, 245, 244);</string>
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
+    </property>
     <property name="text">
-     <string>⛔</string>
+     <string>☷</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnForward">
     <property name="geometry">
      <rect>
       <x>1350</x>
-      <y>980</y>
+      <y>963</y>
       <width>101</width>
       <height>101</height>
      </rect>
@@ -327,6 +255,9 @@ color: rgb(246, 245, 244);</string>
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
     </property>
     <property name="text">
      <string>↑</string>
@@ -335,10 +266,10 @@ color: rgb(246, 245, 244);</string>
    <widget class="QPushButton" name="btnLeft">
     <property name="geometry">
      <rect>
-      <x>1160</x>
-      <y>1130</y>
+      <x>1150</x>
+      <y>1087</y>
       <width>101</width>
-      <height>101</height>
+      <height>100</height>
      </rect>
     </property>
     <property name="font">
@@ -347,6 +278,9 @@ color: rgb(246, 245, 244);</string>
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
     </property>
     <property name="text">
      <string>⟲</string>
@@ -355,10 +289,10 @@ color: rgb(246, 245, 244);</string>
    <widget class="QPushButton" name="btnRight">
     <property name="geometry">
      <rect>
-      <x>1530</x>
-      <y>1130</y>
+      <x>1550</x>
+      <y>1087</y>
       <width>101</width>
-      <height>101</height>
+      <height>100</height>
      </rect>
     </property>
     <property name="font">
@@ -368,41 +302,150 @@ color: rgb(246, 245, 244);</string>
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
+    </property>
     <property name="text">
      <string>⟳</string>
     </property>
    </widget>
-   <widget class="QLabel" name="phiLabel">
+   <widget class="QLabel" name="companyLabel">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>1310</y>
-      <width>129</width>
+      <x>70</x>
+      <y>1180</y>
+      <width>901</width>
       <height>34</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>7</pointsize>
       <weight>50</weight>
       <bold>false</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: none;
+color: white;</string>
+    </property>
     <property name="text">
-     <string>ϕ :</string>
+     <string notr="true">© 2015-2025 ROM Dynamics Robotics Company Limited. All rights reserved.</string>
     </property>
    </widget>
-   <widget class="QLabel" name="phiValueLabel">
+   <widget class="QPushButton" name="addWallBtn">
     <property name="geometry">
      <rect>
-      <x>148</x>
-      <y>1310</y>
-      <width>271</width>
-      <height>34</height>
+      <x>210</x>
+      <y>960</y>
+      <width>101</width>
+      <height>100</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
+    </property>
     <property name="text">
-     <string>sync ...</string>
+     <string>w</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="eraserBtn">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>960</y>
+      <width>101</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
+    </property>
+    <property name="text">
+     <string>e</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addWaypointBtn">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>960</y>
+      <width>101</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
+    </property>
+    <property name="text">
+     <string>p</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="zoomBtn">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>960</y>
+      <width>101</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
+    </property>
+    <property name="text">
+     <string>z</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="normalBtn">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>960</y>
+      <width>101</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;</string>
+    </property>
+    <property name="text">
+     <string>n</string>
     </property>
    </widget>
   </widget>

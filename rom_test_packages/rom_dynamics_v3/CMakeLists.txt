@@ -21,6 +21,10 @@ find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(rom_interfaces REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(nav2_msgs REQUIRED)
+find_package(rclcpp_action REQUIRED)
 
 find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
@@ -41,22 +45,32 @@ set(UI_FILES src/mainwindow.ui)
 qt5_wrap_ui(UI_HEADERS ${UI_FILES})
 
 add_executable(ROM_DYNAMICS
-    src/mainwindow.h
     src/main.cpp
+    src/mainwindow.h
     src/mainwindow.cpp
-    ros2/header/cmd_publisher.h
-    ros2/source/cmd_publisher.cpp
-    ros2/header/subscriber.h
-    ros2/source/subscriber.cpp
     ros2/header/map_subscriber.h
     ros2/source/map_subscriber.cpp
     ${UI_HEADERS}
 )
-
+# add_executable(ROM_DYNAMICS
+#     src/main.cpp
+#     src/mainwindow.h
+#     src/mainwindow.cpp
+#     ros2/header/cmd_service_client.h
+#     ros2/source/cmd_service_client.cpp
+#     ros2/header/pose_subscriber.h
+#     ros2/source/pose_subscriber.cpp
+#     ros2/header/rom_algorithm.h
+#     ros2/header/mode_subscriber.h
+#     ros2/source/mode_subscriber.cpp
+#     ros2/header/navigate_to_pose_client.h
+#     ros2/source/navigate_to_pose_client.cpp
+#     ${UI_HEADERS}
+# )
 
 target_link_libraries(ROM_DYNAMICS ${Qt5Core_LIBRARIES})
 target_link_libraries(ROM_DYNAMICS ${Qt5Widgets_LIBRARIES})
-ament_target_dependencies(ROM_DYNAMICS rclcpp std_msgs geometry_msgs nav_msgs)# rom_interfaces)
+ament_target_dependencies(ROM_DYNAMICS rclcpp rclcpp_action std_msgs geometry_msgs nav_msgs nav2_msgs tf2 tf2_geometry_msgs rom_interfaces)
 
 #---------------- END -----------------#
 
