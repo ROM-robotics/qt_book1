@@ -2,63 +2,57 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include <QPainter>
+#include <QGraphicsScene>
+#include <QGraphicsEllipseItem>
+#include <QGraphicsLineItem>
 #include <QMouseEvent>
-#include <QFileDialog>
-#include <QTimer>
 
-#include <QDebug>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+#include <QGraphicsView>
+
+class GraphicsView : public QGraphicsView
+{
+    Q_OBJECT
+
+public:
+    explicit GraphicsView(QWidget *parent = nullptr);
+    void setScene(QGraphicsScene *scene);
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
+private:
+    QGraphicsScene *scene_;
+    bool drawing;
+    QPointF startPoint_;
+    QGraphicsLineItem *currentLine_;
+};
+
+
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    
-    
-
-protected:
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void paintEvent(QPaintEvent *event);
-    virtual void resizeEvent(QResizeEvent *event);
-
-private slots:
-    // void on_actionSave_triggered();
-    // void on_actionClear_triggered();
-    // void on_action2px_triggered();
-    // void on_action5px_triggered();
-    // void on_action10px_triggered();
-    // void on_actionBlack_triggered();
-    // void on_actionWhite_triggered();
-    // void on_actionRed_triggered();
-    // void on_actionGreen_triggered();
-    // void on_actionBlue_triggered();
 
 private:
     Ui::MainWindow *ui;
-
-    QImage image;
-    QImage wayPointImage_; 
+    QGraphicsScene *scene;
+    QList<QGraphicsEllipseItem *> waypoints_;
 
     bool drawing;
-    QPoint obsStartPoint_;
-    QPoint obsLastPoint_;
-
-    int brushSize;
-    QColor brushColor;
-
-    QList<QPoint> waypointPositions_; 
-    QList<QRect> waypointEllipses_;
-    
+    QGraphicsLineItem *currentLine_;  // Store the line being drawn
+    QPointF obsStartPoint_;
 
 };
+
+
 #endif // MAINWINDOW_H
